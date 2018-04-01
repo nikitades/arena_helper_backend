@@ -1,0 +1,22 @@
+{
+  "name": "dev_rapp_backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "forever --uid keke -a start index.js",
+    "index": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "forever": "^0.15.3",
+    "joi": "^13.1.2",
+    "koa": "^2.5.0",
+    "koa-router": "^7.4.0",
+    "koa-static": "^4.0.2",
+    "mongod": "^2.0.0",
+    "mongodb": "^3.0.5"
+  }
+}
