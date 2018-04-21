@@ -1,7 +1,6 @@
 const http = require('http');
 const https = require('https');
 const fs = require("fs");
-const config = require('./config');
 
 const tlsOptions = {
     key: fs.readFileSync('./tls/privkey.pem', 'utf8'),
