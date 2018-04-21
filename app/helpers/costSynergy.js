@@ -8,8 +8,7 @@ const ideal = {
     7: 4
 };
 
-const getSymbolicCost = card => card.mana > 7 ? 7 : card.mana;
-
+const getSymbolicCost = card => card.cost > 7 ? 7 : card.cost;
 module.exports = function costSynergy(card, pick) {
     let cost = getSymbolicCost(card);
     let chance = 0;

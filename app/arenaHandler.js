@@ -13,13 +13,6 @@ module.exports = async function arenaHandler(ctx, next) {
     const classList = await col.distinct('classification', {});
     if (classList.indexOf(input.className) === -1) return ctx.body = 'Nooo';
 
-    // let cards = await col.find({
-    //     $or: [
-    //         {classification: input.className},
-    //         {classification: {$exists: false}}
-    //     ]
-    // }).toArray();
-
     let fetchedRoster = await col.find({
         uuid: {
             $in: Array.isArray(input.roster) ? input.roster : [input.roster]

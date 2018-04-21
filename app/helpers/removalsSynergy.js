@@ -1,10 +1,9 @@
 const enough = 2;
-
-const checkIfRemoval = card => !card.perks && card.perks.indexOf('removal') !== -1;
+const checkRemoval = require('../../perkFinders/checkRemoval');
 
 module.exports = function removalsSynergy(card, pick) {
-    let removalCardsCount = pick.reduce(((acc, item) => checkIfRemoval(item) ? acc + 1 : acc), 0);
-    if (removalCardsCount < enough && checkIfRemoval(card)) return {
+    let removalCardsCount = pick.reduce(((acc, item) => checkRemoval(item) ? acc + 1 : acc), 0);
+    if (removalCardsCount < enough && checkRemoval(card)) return {
         chance: 15,
         msg: ['removal_needed']
     };

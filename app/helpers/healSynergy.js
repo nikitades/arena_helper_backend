@@ -1,9 +1,9 @@
-const checkIfHeals = card => card.text.match(/restore/i);
 const enough = 3;
+const checkHeal = require('../../perkFinders/checkHeal');
 
 module.exports = function healSynergy(card, pick) {
-    let healCardsCount = pick.reduce(((acc, item) => checkIfHeals(item) ? acc + 1 : 0), 0);
-    if (healCardsCount < enough && checkIfHeals(card)) return {
+    let healCardsCount = pick.reduce(((acc, item) => checkHeal(item) ? acc + 1 : 0), 0);
+    if (healCardsCount < enough && checkHeal(card)) return {
         chance: 10,
         msg: ['heal_needed']
     };

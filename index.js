@@ -4,16 +4,17 @@ const static = require('koa-static');
 const MongoDB = require('mongodb');
 const app = new Koa();
 const router = new Router();
+const createMongoServer = require('./mongoServer');
 const createServer = require('./server');
 const arenaHandler = require('./app/arenaHandler');
 const Validator = require('./Validator');
-
 
 let startingPromises = [];
 
 app.use(static('./public'));
 
 startingPromises.push((async () => {
+    await createMongoServer();
     let client = await MongoDB.MongoClient.connect('mongodb://localhost:27017');
     app.context.db = client.db('arenahelper');
 })());
@@ -41,16 +42,6 @@ app.use(async (ctx, next) => {
 });
 
 router.get('/arena', arenaHandler);
-
-router.get('/check', async (ctx, next) => {
-    let cards = require('./cards');
-    let names = Object.values(cards).map(item => Object.values(item).map(item => item.name));
-    let concat_names = [];
-    for (let i in names) concat_names = concat_names.concat(names[i]);
-    let db_cards = await ctx.db.collection('cards').find().toArray();
-    db_cards = db_cards.map(item => item.name);
-    ctx.body = concat_names.filter(item => db_cards.indexOf(item) === -1);
-});
 
 app.use(router.routes());
 
