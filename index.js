@@ -16,6 +16,7 @@ app.use(static('./public'));
 startingPromises.push((async () => {
     let client = await MongoDB.MongoClient.connect(config.mongo.serverAddress);
     app.context.db = client.db(config.mongo.dbName);
+    app.context.db.auth(...config.mongo.credentials)
 })());
 
 startingPromises.push((async () => {
