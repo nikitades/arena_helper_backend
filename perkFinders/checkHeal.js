@@ -1,4 +1,4 @@
 const healKeyword = new RegExp(/восстанавливает/i);
-module.expors = function checkHeal(card) {
+module.exports = function checkHeal(card) {
     return healKeyword.test(card.text);
 };

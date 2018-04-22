@@ -2,11 +2,11 @@ const Joi = require('joi');
 
 module.exports = class Validator {
     constructor() {
-        let uuidRule = Joi.number().integer();
+        let idRule = Joi.string().regex(/\w+/);
         this.schema = Joi.object().keys({
             className: Joi.string().regex(/[A-Za-z]+/),
-            roster: [uuidRule, Joi.array().items(uuidRule)],
-            pick: [uuidRule, Joi.array().items(uuidRule)]
+            roster: [idRule, Joi.array().items(idRule)],
+            pick: [idRule, Joi.array().items(idRule)]
         });
     }
 

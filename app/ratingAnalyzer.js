@@ -61,6 +61,6 @@ module.exports = async (roster, pick, ctx) => {
 
             return card.rating + chance;
         }),
-        msg
+        msg: Array.from(new Set(msg))
     };
 };

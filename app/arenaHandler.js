@@ -4,26 +4,24 @@ const ucfirst = str => {
     return str && str.split('').map((char, i) => i === 0 ? char.toUpperCase() : char).join('');
 };
 
+const getCard = async (col, id) => (await col.find({id}).limit(1).toArray()).pop();
+
 module.exports = async function arenaHandler(ctx, next) {
     let col = ctx.db.collection('cards');
 
     let input = await ctx.validator.check(ctx.query);
     input.className = ucfirst(input.className);
 
-    const classList = await col.distinct('classification', {});
-    if (classList.indexOf(input.className) === -1) return ctx.body = 'Nooo';
+    const classList = await col.distinct('cardClass', {});
+    if (!input.className || classList.indexOf(input.className.toUpperCase()) === -1) return ctx.body = 'Nooo';
 
-    let fetchedRoster = await col.find({
-        uuid: {
-            $in: Array.isArray(input.roster) ? input.roster : [input.roster]
-        }
-    }).toArray();
+    let roster;
+    if (Array.isArray(input.roster)) roster = await Promise.all(input.roster.map(id => getCard(col, id)));
+    else roster = !!input.roster ? [await getCard(col, input.roster)] : [];
 
-    let pick = await col.find({
-        uuid: {
-            $in: Array.isArray(input.pick) ? input.pick : [input.pick]
-        }
-    }).toArray();
+    let pick;
+    if (Array.isArray(input.pick)) pick = await Promise.all(input.pick.map(id => getCard(col, id)));
+    else pick = !!input.pick ? [await getCard(col, input.pick)] : [];
 
-    ctx.body = await ratingAnalyzer(fetchedRoster, pick, ctx);
+    ctx.body = await ratingAnalyzer(roster, pick, ctx);
 };
