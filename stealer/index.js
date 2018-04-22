@@ -1,5 +1,6 @@
 const request = require('request-promise');
-const MongoDB = require("mongodb");
+const config = require('../config');
+const getMongoClient = require('../getMongoClient');
 
 const PERKS = ["DESTROY", "DISCARD", "HAND", "WEAPON", "SPELL", "SPELL DAMAGE", "COST", "ATTACK", "HEAL", "DIVINE SHIELD", "MURLOC", "PIRATE", "HEALTH", "MANA CRYSTAL", "DRAGON", "MECH", "BEAST", "DEMON", "RECRUIT", "DUPLICATES", "ELEMENTAL", "ADAPT", "FROZEN", "TOTEM", "JADE", "CHOOSE ONE"];
 const CORRECTION = require('./correction');
@@ -7,8 +8,8 @@ const CORRECTION = require('./correction');
 (async () => {
     try {
         //init
-        const client = await MongoDB.MongoClient.connect('mongodb://localhost:27017');
-        const db = client.db('arenaHelper');
+        const client = await getMongoClient(config.mongo.serverAddress, config.mongo.login, config.mongo.password, config.mongo.dbName);
+        const db = client.db(config.mongo.dbName);
         const col = db.collection('cards');
 
         //download

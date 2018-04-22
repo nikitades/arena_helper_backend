@@ -8,15 +8,15 @@ const createServer = require('./server');
 const arenaHandler = require('./app/arenaHandler');
 const Validator = require('./Validator');
 const config = require('./config');
+const getMongoClient = require('./getMongoClient');
 
 let startingPromises = [];
 
 app.use(static('./public'));
 
 startingPromises.push((async () => {
-    let client = await MongoDB.MongoClient.connect(config.mongo.serverAddress);
+    const client = await getMongoClient(config.mongo.serverAddress, config.mongo.login, config.mongo.password, config.mongo.dbName);
     app.context.db = client.db(config.mongo.dbName);
-    app.context.db.auth(...config.mongo.credentials)
 })());
 
 startingPromises.push((async () => {
@@ -46,6 +46,16 @@ router.get('/arena', arenaHandler);
 app.use(router.routes());
 
 (async () => {
-    for (let i in startingPromises) await startingPromises[i];
-    createServer(app.callback());
+    try {
+        for (let i in startingPromises) await startingPromises[i];
+    } catch (e) {
+        console.error('Start failed!');
+        console.error(e);
+    }
+    try {
+        createServer(app.callback());
+    } catch (e) {
+        console.error('Runtime error!');
+        console.error(e);
+    }
 })();

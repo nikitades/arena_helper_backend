@@ -1,7 +1,14 @@
 module.exports = {
     mongo: {
-        serverAddress: "mongodb://address:port",
+        serverAddress: "address:port", //no mongodb:// here!
         dbName: "arenahelper",
-        credentials: ['arenahelper', 'password']
+        login: 'arenahelper',
+        password: 'password'
+    },
+    http: {
+        port: 33080
+    },
+    https: {
+        port: 33443
     }
 };
