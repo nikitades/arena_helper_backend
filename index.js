@@ -4,19 +4,18 @@ const static = require('koa-static');
 const MongoDB = require('mongodb');
 const app = new Koa();
 const router = new Router();
-const createMongoServer = require('./mongoServer');
 const createServer = require('./server');
 const arenaHandler = require('./app/arenaHandler');
 const Validator = require('./Validator');
+const config = require('./config');
 
 let startingPromises = [];
 
 app.use(static('./public'));
 
 startingPromises.push((async () => {
-    await createMongoServer();
-    let client = await MongoDB.MongoClient.connect('mongodb://localhost:27017');
-    app.context.db = client.db('arenahelper');
+    let client = await MongoDB.MongoClient.connect(config.mongo.serverAddress);
+    app.context.db = client.db(config.mongo.dbName);
 })());
 
 startingPromises.push((async () => {
